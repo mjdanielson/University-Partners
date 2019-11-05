@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>University Partner Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      h2,
+      h3 {
+        margin: 10px;
+        font-size: 1.2em;
+      }
+
+      h3 {
+        font-size: 5em;
+      }
+
+      p {
+        font-size: 0.85em;
+        margin: 10px;
+        text-align: left;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+
+      .mapboxgl-popup-content {
+        font: 400 12px/20px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+        padding: 2;
+        /*controling transparency and color of pop-up */
+        background-color: rgba(255, 255, 255, .70);
+      }
+
+      .mapboxgl-popup-content-wrapper {
+        padding: 5%;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id='map'></div>
+
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoibWpkYW5pZWxzb24iLCJhIjoiY2p2bzFlbnZ5MW5pbTN5cGJ2YWp2MW9vaiJ9.kAaZq3iyJwvrMLK7XDs_qw';
+      var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mjdanielson/ck2l03jnx59dh1cp8bw51dfqv',
+        center: [-100.546875,
+          38.8225909761771
+        ],
+        zoom: 3.5
+      });
+
+
+
+      var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: true,
+      });
+
+      map.on('mouseenter', 'university-contacts', function(e) {
+
+        map.getCanvas().style.cursor = 'pointer';
+        var UName = e.features[0].properties.Name;
+
+        popup.setLngLat(e.lngLat)
+          .setHTML(UName)
+          .addTo(map);
+      });
+
+    </script>
+
+  </body>
+
+</html>
