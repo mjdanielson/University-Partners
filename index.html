@@ -3,7 +3,7 @@
 
   <head>
     <meta charset='utf-8' />
-    <title>University Partner Map</title>
+    <title>University Partners</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.css' rel='stylesheet' />
@@ -36,7 +36,6 @@
         width: 100%;
       }
 
-
       .mapboxgl-popup-content {
         font: 400 12px/20px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
         padding: 2;
@@ -45,7 +44,7 @@
       }
 
       .mapboxgl-popup-content-wrapper {
-        padding: 5%;
+        padding: 2%;
       }
 
     </style>
@@ -66,20 +65,31 @@
       });
 
 
+      map.on('click', 'university-contacts', function(e) {
+        var coordinates = e.features[0].geometry.coordinates.slice();
+        var description = e.features[0].properties.Name;
 
-      var popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: true,
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(description)
+          .addTo(map);
       });
 
-      map.on('mouseenter', 'university-contacts', function(e) {
-
+      // Change the cursor to a pointer when the mouse is over the places layer.
+      map.on('mouseenter', 'university-contacts', function() {
         map.getCanvas().style.cursor = 'pointer';
-        var UName = e.features[0].properties.Name;
+      });
 
-        popup.setLngLat(e.lngLat)
-          .setHTML(UName)
-          .addTo(map);
+      // Change it back to a pointer when it leaves.
+      map.on('mouseleave', 'university-contacts', function() {
+        map.getCanvas().style.cursor = '';
       });
 
     </script>
